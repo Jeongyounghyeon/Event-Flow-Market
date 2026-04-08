@@ -1,0 +1,63 @@
+= Stock Service API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 재고 조회
+
+`GET /api/stocks/{productId}`
+
+=== 요청
+
+include::{snippets}/stock-get/http-request.adoc[]
+
+include::{snippets}/stock-get/path-parameters.adoc[]
+
+=== 응답
+
+include::{snippets}/stock-get/http-response.adoc[]
+
+include::{snippets}/stock-get/response-fields.adoc[]
+
+---
+
+== 재고 등록
+
+`POST /api/stocks/{productId}`
+
+=== 요청
+
+include::{snippets}/stock-register/http-request.adoc[]
+
+include::{snippets}/stock-register/path-parameters.adoc[]
+
+include::{snippets}/stock-register/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/stock-register/http-response.adoc[]
+
+include::{snippets}/stock-register/response-fields.adoc[]
+
+---
+
+== 재고 수정
+
+`PATCH /api/stocks/{productId}`
+
+=== 요청
+
+include::{snippets}/stock-update/http-request.adoc[]
+
+include::{snippets}/stock-update/path-parameters.adoc[]
+
+include::{snippets}/stock-update/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/stock-update/http-response.adoc[]
+
+include::{snippets}/stock-update/response-fields.adoc[]

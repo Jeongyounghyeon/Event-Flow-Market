@@ -3,6 +3,7 @@ plugins {
     kotlin("plugin.spring") version "2.2.21" apply false
     id("org.springframework.boot") version "4.0.5" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
+    id("org.asciidoctor.jvm.convert") version "4.0.4" apply false
 }
 
 group = "io.github.jeongyounghyeon"
@@ -34,6 +35,7 @@ subprojects {
             "implementation"("org.springframework.boot:spring-boot-starter")
             "testImplementation"("org.springframework.boot:spring-boot-starter-test")
             "testImplementation"("org.jetbrains.kotlin:kotlin-test-junit5")
+            "testImplementation"("org.mockito.kotlin:mockito-kotlin:5.4.0")
             "testRuntimeOnly"("org.junit.platform:junit-platform-launcher")
         }
     }

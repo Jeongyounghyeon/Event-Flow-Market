@@ -62,7 +62,7 @@ spring:
 
 1. `Authorization: Bearer <token>` 헤더에서 토큰 추출
 2. 토큰 서명 및 만료 검증 (공개키 또는 공유 시크릿 사용)
-3. 검증 성공 시 `X-Member-Id`, `X-Member-Role` 헤더를 추가하여 downstream 서비스에 전달
+3. 검증 성공 시 `Member-Id`, `X-Member-Role` 헤더를 추가하여 downstream 서비스에 전달
 4. 검증 실패 시 `401 Unauthorized` 반환
 
 ## 서비스 포트 (기본값)

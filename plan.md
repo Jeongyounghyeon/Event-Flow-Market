@@ -10,9 +10,9 @@
 - [x] Stock 테이블 설계
 
 ### API 명세 설계
-- [ ] Member Service API 명세 (Swagger or Spring REST Docs)
-- [ ] Order Service API 명세
-- [ ] Stock Service API 명세
+- [x] Member Service API 명세 (Spring REST Docs)
+- [x] Order Service API 명세
+- [x] Stock Service API 명세
 
 ---
 

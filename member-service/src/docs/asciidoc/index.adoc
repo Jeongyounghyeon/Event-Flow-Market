@@ -1,0 +1,97 @@
+= Member Service API
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 회원가입
+
+`POST /api/members/signup`
+
+=== 요청
+
+include::{snippets}/member-signup/http-request.adoc[]
+
+include::{snippets}/member-signup/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member-signup/http-response.adoc[]
+
+include::{snippets}/member-signup/response-fields.adoc[]
+
+---
+
+== 로그인
+
+`POST /api/members/login`
+
+=== 요청
+
+include::{snippets}/member-login/http-request.adoc[]
+
+include::{snippets}/member-login/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member-login/http-response.adoc[]
+
+include::{snippets}/member-login/response-fields.adoc[]
+
+---
+
+== 토큰 재발급
+
+`POST /api/members/token/refresh`
+
+=== 요청
+
+include::{snippets}/member-token-refresh/http-request.adoc[]
+
+include::{snippets}/member-token-refresh/request-headers.adoc[]
+
+=== 응답
+
+include::{snippets}/member-token-refresh/http-response.adoc[]
+
+include::{snippets}/member-token-refresh/response-fields.adoc[]
+
+---
+
+== 내 프로필 조회
+
+`GET /api/members/me`
+
+=== 요청
+
+include::{snippets}/member-get-me/http-request.adoc[]
+
+include::{snippets}/member-get-me/request-headers.adoc[]
+
+=== 응답
+
+include::{snippets}/member-get-me/http-response.adoc[]
+
+include::{snippets}/member-get-me/response-fields.adoc[]
+
+---
+
+== 내 프로필 수정
+
+`PATCH /api/members/me`
+
+=== 요청
+
+include::{snippets}/member-update-me/http-request.adoc[]
+
+include::{snippets}/member-update-me/request-headers.adoc[]
+
+include::{snippets}/member-update-me/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/member-update-me/http-response.adoc[]
+
+include::{snippets}/member-update-me/response-fields.adoc[]
