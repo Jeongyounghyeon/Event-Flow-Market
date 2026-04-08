@@ -4,10 +4,10 @@
 
 ### DB Schema 설계
 - [x] 프로젝트 멀티모듈 구조 세팅 (common, gateway, member-service, order-service, stock-service)
-- [ ] Member 테이블 설계
-- [ ] Order 테이블 설계
-- [ ] OutboxEvent 테이블 설계
-- [ ] Stock 테이블 설계
+- [x] Member 테이블 설계
+- [x] Order 테이블 설계
+- [x] OutboxEvent 테이블 설계
+- [x] Stock 테이블 설계
 
 ### API 명세 설계
 - [ ] Member Service API 명세 (Swagger or Spring REST Docs)

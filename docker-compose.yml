@@ -1,0 +1,97 @@
+services:
+
+  member-db:
+    image: postgres:17-alpine
+    container_name: member-db
+    environment:
+      POSTGRES_DB: member_db
+      POSTGRES_USER: member
+      POSTGRES_PASSWORD: member1234
+    ports:
+      - "5432:5432"
+    volumes:
+      - member-db-data:/var/lib/postgresql/data
+      - ./member-service/src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U member -d member_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  order-db:
+    image: postgres:17-alpine
+    container_name: order-db
+    environment:
+      POSTGRES_DB: order_db
+      POSTGRES_USER: order
+      POSTGRES_PASSWORD: order1234
+    ports:
+      - "5433:5432"
+    volumes:
+      - order-db-data:/var/lib/postgresql/data
+      - ./order-service/src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U order -d order_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  stock-db:
+    image: postgres:17-alpine
+    container_name: stock-db
+    environment:
+      POSTGRES_DB: stock_db
+      POSTGRES_USER: stock
+      POSTGRES_PASSWORD: stock1234
+    ports:
+      - "5434:5432"
+    volumes:
+      - stock-db-data:/var/lib/postgresql/data
+      - ./stock-service/src/main/resources/db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U stock -d stock_db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  kafka:
+    image: apache/kafka:4.0.0
+    container_name: kafka
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      # INTERNAL: 컨테이너 간 통신 (kafka:9092)
+      # EXTERNAL: 호스트 머신 접근 (localhost:9093)
+      # CONTROLLER: KRaft 컨트롤러 전용
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:9093,CONTROLLER://0.0.0.0:9094
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9093
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9094
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+    ports:
+      - "9093:9093"  # 호스트 머신에서 접근 시 localhost:9093 사용
+    healthcheck:
+      test: [ "CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server kafka:9092 --list" ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+
+
+volumes:
+  member-db-data:
+  order-db-data:
+  stock-db-data:
