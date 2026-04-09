@@ -9,6 +9,8 @@ import io.github.jeongyounghyeon.memberservice.service.MemberService
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity
 import org.mockito.kotlin.any
 import org.mockito.kotlin.given
 import org.springframework.beans.factory.annotation.Autowired
@@ -53,6 +55,7 @@ class MemberControllerRestDocsTest {
     fun setUp(restDocumentation: RestDocumentationContextProvider) {
         mockMvc = MockMvcBuilders
             .webAppContextSetup(webApplicationContext)
+            .apply<DefaultMockMvcBuilder>(springSecurity())
             .apply<DefaultMockMvcBuilder>(documentationConfiguration(restDocumentation))
             .build()
     }
@@ -157,6 +160,7 @@ class MemberControllerRestDocsTest {
     }
 
     @Test
+    @WithMockUser
     fun `내 프로필 조회`() {
         given(memberService.findById(any()))
             .willReturn(memberResponse)
@@ -185,6 +189,7 @@ class MemberControllerRestDocsTest {
     }
 
     @Test
+    @WithMockUser
     fun `내 프로필 수정`() {
         val updated = memberResponse.copy(nickname = "새닉네임")
         given(memberService.update(any(), any()))
