@@ -1,1 +1,28 @@
-spring.application.name: gateway
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: member-service
+            uri: http://localhost:8081
+            predicates:
+              - Path=/api/members/**
+
+          - id: order-service
+            uri: http://localhost:8082
+            predicates:
+              - Path=/api/orders/**
+
+          - id: stock-service
+            uri: http://localhost:8083
+            predicates:
+              - Path=/api/stocks/**
+
+server:
+  port: 8080
+
+jwt:
+  secret: ${JWT_SECRET:local-dev-secret-key-must-be-at-least-32-characters}
