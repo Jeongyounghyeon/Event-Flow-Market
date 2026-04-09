@@ -13,6 +13,7 @@ import org.mockito.kotlin.whenever
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.restdocs.RestDocumentationContextProvider
 import org.springframework.restdocs.RestDocumentationExtension
 import org.springframework.restdocs.headers.HeaderDocumentation.headerWithName
@@ -47,6 +48,9 @@ class OrderControllerRestDocsTest {
 
     @MockitoBean
     private lateinit var orderService: OrderService
+
+    @MockitoBean
+    private lateinit var kafkaTemplate: KafkaTemplate<String, String>
 
     private lateinit var mockMvc: MockMvc
 

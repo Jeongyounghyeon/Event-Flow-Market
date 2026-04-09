@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS outbox_events
     aggregate_type VARCHAR(100) NOT NULL,                   -- 'ORDER'
     aggregate_id   BIGINT       NOT NULL,                   -- orders.id
     event_type     VARCHAR(100) NOT NULL,                   -- 'ORDER_CREATED' | 'ORDER_CANCELLED'
-    payload        JSONB        NOT NULL,                   -- 직렬화된 이벤트 데이터
+    payload        TEXT         NOT NULL,                   -- 직렬화된 이벤트 데이터
     status         VARCHAR(20)  NOT NULL DEFAULT 'PENDING', -- PENDING | PUBLISHED | FAILED
     created_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     published_at   TIMESTAMPTZ                              -- Kafka 발행 성공 시각
