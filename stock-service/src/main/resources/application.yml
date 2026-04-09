@@ -1,1 +1,25 @@
-spring.application.name: stock-service
+spring:
+  application:
+    name: stock-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5434/stock_db
+    username: stock
+    password: stock1234
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  sql:
+    init:
+      mode: never
+
+server:
+  port: 8083
