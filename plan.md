@@ -19,41 +19,41 @@
 ## 2단계: 기본 기능 구현
 
 ### Common 모듈
-- [ ] 공통 API 응답 래퍼 `ApiResponse<T>`
-- [ ] 공통 예외 클래스 (`BusinessException`, `ErrorCode`)
-- [ ] Kafka 이벤트 DTO 클래스 정의
-  - [ ] `OrderCreatedEvent`
-  - [ ] `OrderCancelledEvent`
-  - [ ] `StockReservedEvent`
-  - [ ] `StockFailedEvent`
-  - [ ] `StockReleasedEvent`
-- [ ] Kafka 토픽 이름 상수 (`KafkaTopics`)
+- [x] 공통 API 응답 래퍼 `ApiResponse<T>`
+- [x] 공통 예외 클래스 (`BusinessException`, `ErrorCode`)
+- [x] Kafka 이벤트 DTO 클래스 정의
+  - [x] `OrderCreatedEvent`
+  - [x] `OrderCancelledEvent`
+  - [x] `StockReservedEvent`
+  - [x] `StockFailedEvent`
+  - [x] `StockReleasedEvent`
+- [x] Kafka 토픽 이름 상수 (`KafkaTopics`)
 
 ### Member Service
-- [ ] Member 엔티티 및 Repository
-- [ ] 회원 가입 API (`POST /api/members/signup`)
-- [ ] 로그인 API (`POST /api/members/login`) — JWT 발급
-- [ ] JWT Provider 구현 (생성/검증)
-- [ ] 리프레시 토큰 Redis 저장 및 재발급 API
-- [ ] 내 프로필 조회/수정 API
-- [ ] Spring Security 설정
+- [x] Member 엔티티 및 Repository
+- [x] 회원 가입 API (`POST /api/members/signup`)
+- [x] 로그인 API (`POST /api/members/login`) — JWT 발급
+- [x] JWT Provider 구현 (생성/검증)
+- [x] 리프레시 토큰 Redis 저장 및 재발급 API
+- [x] 내 프로필 조회/수정 API
+- [x] Spring Security 설정
 
 ### Order Service
-- [ ] Order 엔티티 및 Repository
-- [ ] 주문 생성 API (`POST /api/orders`)
-- [ ] 주문 조회 API (`GET /api/orders/{orderId}`)
-- [ ] 주문 취소 API (`DELETE /api/orders/{orderId}`)
+- [x] Order 엔티티 및 Repository
+- [x] 주문 생성 API (`POST /api/orders`)
+- [x] 주문 조회 API (`GET /api/orders/{orderId}`)
+- [x] 주문 취소 API (`DELETE /api/orders/{orderId}`)
 
 ### Stock Service
-- [ ] Stock 엔티티 및 Repository
-- [ ] 재고 등록 API (`POST /api/stocks/{productId}`)
-- [ ] 재고 조회 API (`GET /api/stocks/{productId}`)
-- [ ] 재고 차감/복구 서비스 로직
+- [x] Stock 엔티티 및 Repository
+- [x] 재고 등록 API (`POST /api/stocks/{productId}`)
+- [x] 재고 조회 API (`GET /api/stocks/{productId}`)
+- [x] 재고 차감/복구 서비스 로직
 
 ### Gateway
-- [ ] 서비스별 라우팅 규칙 설정
-- [ ] JWT 검증 필터 구현 (`JwtAuthFilter`)
-- [ ] 인증 불필요 경로 화이트리스트 설정
+- [x] 서비스별 라우팅 규칙 설정
+- [x] JWT 검증 필터 구현 (`JwtAuthFilter`)
+- [x] 인증 불필요 경로 화이트리스트 설정
 
 ---
 
