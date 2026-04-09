@@ -60,26 +60,27 @@
 ## 3단계: 이벤트 통합 (Kafka + Saga)
 
 ### Kafka 인프라
-- [ ] `docker-compose.yml` 작성 (Kafka, Zookeeper, Redis, 각 서비스 DB)
-- [ ] Kafka 토픽 생성 설정 (`order.created`, `order.cancelled`, `stock.reserved`, `stock.failed`, `stock.released`)
+- [x] `docker-compose.yml` 작성 (Kafka KRaft, Redis, 각 서비스 DB)
+- [x] Kafka 토픽 자동 생성 (`KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"` → KafkaAdmin으로 생성 가능)
 
 ### Order Service — Transactional Outbox 패턴
-- [ ] `OutboxEvent` 엔티티 및 Repository
-- [ ] 주문 생성 시 Outbox 레코드 동시 저장 (단일 트랜잭션)
-- [ ] Outbox 폴러 구현 (스케줄러로 PENDING 레코드 Kafka 발행)
-- [ ] 발행 성공 후 status → PUBLISHED 업데이트
+- [x] `OutboxEvent` 엔티티 및 Repository
+- [x] 주문 생성 시 Outbox 레코드 동시 저장 (단일 트랜잭션)
+- [x] Outbox 폴러 구현 (`OrderEventPublisher`, @Scheduled fixedDelay=1s)
+- [x] 발행 성공 후 status → PUBLISHED 업데이트
 
 ### Order Service — Kafka Consumer
-- [ ] `StockReservedEvent` 수신 → 주문 상태 CONFIRMED
-- [ ] `StockFailedEvent` 수신 → 주문 상태 CANCELLED, `OrderCancelledEvent` 발행
+- [x] `StockReservedEvent` 수신 → 주문 상태 CONFIRMED (`StockEventConsumer`)
+- [x] `StockFailedEvent` 수신 → 주문 상태 CANCELLED, `OrderCancelledEvent` 발행
 
 ### Stock Service — Kafka Consumer + Redisson 분산락
-- [ ] Redisson 의존성 추가 및 `RedissonConfig` 설정
-- [ ] `OrderCreatedEvent` 수신 → 분산락 획득 후 재고 차감
-  - [ ] 차감 성공 → `StockReservedEvent` 발행
-  - [ ] 재고 부족 / 락 실패 → `StockFailedEvent` 발행
-- [ ] `OrderCancelledEvent` 수신 → 재고 복구 (보상 트랜잭션) → `StockReleasedEvent` 발행
-- [ ] Kafka Consumer 멱등성 보장 (처리된 이벤트 ID 중복 방지)
+- [x] Redisson 의존성 추가 (`redisson:3.43.0`) 및 `RedissonConfig` 설정
+- [x] `OrderCreatedEvent` 수신 → 분산락 획득 후 재고 차감 (`OrderEventConsumer`)
+  - [x] 차감 성공 → `StockReservedEvent` 발행
+  - [x] 재고 부족 / 락 실패 → `StockFailedEvent` 발행
+- [x] `OrderCancelledEvent` 수신 → 재고 복구 (보상 트랜잭션) → `StockReleasedEvent` 발행
+- [x] Kafka Consumer 멱등성 보장 (`ProcessedEvent` 테이블로 eventId 중복 방지)
+- [x] 보상 트랜잭션 정확성 (`ReservedOrder` 테이블로 실제 예약된 주문만 복구)
 
 ### 통합 테스트
 - [ ] 주문 생성 → 재고 차감 → 주문 확정 E2E 흐름 검증
