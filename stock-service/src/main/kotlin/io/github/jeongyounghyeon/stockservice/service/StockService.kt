@@ -7,4 +7,6 @@ interface StockService {
     fun findByProductId(productId: Long): StockResponse
     fun register(productId: Long, request: StockRegisterRequest): StockResponse
     fun update(productId: Long, request: StockRegisterRequest): StockResponse
+    fun reserve(productId: Long, quantity: Int): Pair<Boolean, String>
+    fun restore(productId: Long, quantity: Int)
 }

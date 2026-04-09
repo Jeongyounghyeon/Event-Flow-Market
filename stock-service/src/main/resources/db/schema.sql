@@ -18,3 +18,14 @@ CREATE TABLE IF NOT EXISTS processed_events
     event_type VARCHAR(100) NOT NULL,
     processed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- ──────────────────────────────────────────────────────────
+-- 재고 예약 추적 (보상 트랜잭션용)
+-- OrderCreated 처리 성공 시 저장, OrderCancelled 처리 후 삭제
+-- ──────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS reserved_orders
+(
+    order_id   BIGINT PRIMARY KEY,
+    product_id BIGINT NOT NULL,
+    quantity   INT    NOT NULL
+);

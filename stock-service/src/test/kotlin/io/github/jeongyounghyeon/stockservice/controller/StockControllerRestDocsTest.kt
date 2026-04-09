@@ -23,6 +23,8 @@ import org.springframework.restdocs.payload.PayloadDocumentation.requestFields
 import org.springframework.restdocs.payload.PayloadDocumentation.responseFields
 import org.springframework.restdocs.request.RequestDocumentation.parameterWithName
 import org.springframework.restdocs.request.RequestDocumentation.pathParameters
+import org.redisson.api.RedissonClient
+import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -43,6 +45,12 @@ class StockControllerRestDocsTest {
 
     @MockitoBean
     private lateinit var stockService: StockService
+
+    @MockitoBean
+    private lateinit var kafkaTemplate: KafkaTemplate<String, String>
+
+    @MockitoBean
+    private lateinit var redissonClient: RedissonClient
 
     private lateinit var mockMvc: MockMvc
 
