@@ -16,6 +16,12 @@ class MutableHttpServletRequest(request: HttpServletRequest) : HttpServletReques
         return customHeaders[name] ?: super.getHeader(name)
     }
 
+    override fun getHeaders(name: String): java.util.Enumeration<String> {
+        val value = customHeaders[name]
+        return if (value != null) Collections.enumeration(listOf(value))
+        else super.getHeaders(name)
+    }
+
     override fun getHeaderNames(): java.util.Enumeration<String> {
         val names = customHeaders.keys.toMutableList()
         val superNames = super.getHeaderNames()
