@@ -1,0 +1,76 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: event-flow-market
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: event-flow-market/gateway:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: common-secret
+                  key: JWT_SECRET
+            - name: MEMBER_SERVICE_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: common-config
+                  key: MEMBER_SERVICE_URI
+            - name: ORDER_SERVICE_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: common-config
+                  key: ORDER_SERVICE_URI
+            - name: STOCK_SERVICE_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: common-config
+                  key: STOCK_SERVICE_URI
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+  namespace: event-flow-market
+spec:
+  type: LoadBalancer
+  selector:
+    app: gateway
+  ports:
+    - port: 80
+      targetPort: 8080
