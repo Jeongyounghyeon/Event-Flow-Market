@@ -83,26 +83,23 @@
 - [x] 보상 트랜잭션 정확성 (`ReservedOrder` 테이블로 실제 예약된 주문만 복구)
 
 ### 통합 테스트
-- [ ] 주문 생성 → 재고 차감 → 주문 확정 E2E 흐름 검증
-- [ ] 재고 부족 시 주문 취소 보상 트랜잭션 검증
+- [x] 주문 생성 → 재고 차감 → 주문 확정 E2E 흐름 검증
+- [x] 재고 부족 시 주문 취소 보상 트랜잭션 검증
 
 ---
 
 ## 4단계: 인프라 고도화 (Kubernetes)
 
 ### Docker
-- [ ] 각 서비스 `Dockerfile` 작성 (멀티 스테이지 빌드)
-- [ ] 로컬 `docker-compose.yml` 완성 (전체 스택)
+- [x] 각 서비스 `Dockerfile` 작성 (멀티 스테이지 빌드)
+- [x] 로컬 `docker-compose.yml` 완성 (전체 스택)
 
 ### Kubernetes (로컬: kind 또는 minikube)
-- [ ] 각 서비스 `Deployment` / `Service` Manifest 작성
-- [ ] `ConfigMap` / `Secret` 분리 (DB URL, Kafka 주소, JWT 시크릿)
-- [ ] `Liveness Probe` / `Readiness Probe` 설정
-- [ ] KEDA `ScaledObject` 설정 (Kafka Message Lag 기반 오토스케일)
+- [x] 각 서비스 `Deployment` / `Service` Manifest 작성
+- [x] `ConfigMap` / `Secret` 분리 (DB URL, Kafka 주소, JWT 시크릿)
+- [x] `Liveness Probe` / `Readiness Probe` 설정
+- [x] KEDA `ScaledObject` 설정 (Kafka Message Lag 기반 오토스케일)
 
-### AWS EKS (최종 단계)
-- [ ] ECR에 이미지 푸시 자동화
-- [ ] EKS 클러스터 생성 및 Manifest 적용
 
 ---
 
