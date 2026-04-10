@@ -23,6 +23,8 @@ class SecurityConfig {
                     "/api/members/signup",
                     "/api/members/login",
                     "/api/members/token/refresh",
+                    "/actuator/health",
+                    "/actuator/health/**",
                 ).permitAll()
                     .anyRequest().authenticated()
             }

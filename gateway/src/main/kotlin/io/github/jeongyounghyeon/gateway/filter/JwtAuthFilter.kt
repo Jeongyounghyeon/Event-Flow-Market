@@ -17,6 +17,7 @@ class JwtAuthFilter(
         "/api/members/signup",
         "/api/members/login",
         "/api/members/token/refresh",
+        "/actuator/health",
     )
 
     override fun doFilterInternal(
