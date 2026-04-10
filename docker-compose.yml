@@ -91,6 +91,96 @@ services:
       retries: 5
 
 
+  member-service:
+    build:
+      context: .
+      dockerfile: member-service/Dockerfile
+    container_name: member-service
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-docker-compose-secret-key-must-be-at-least-32-chars}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://member-db:5432/member_db
+      SPRING_DATA_REDIS_HOST: redis
+    depends_on:
+      member-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8081/actuator/health || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+    container_name: order-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://order-db:5432/order_db
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      order-db:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8082/actuator/health || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  stock-service:
+    build:
+      context: .
+      dockerfile: stock-service/Dockerfile
+    container_name: stock-service
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://stock-db:5432/stock_db
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      stock-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8083/actuator/health || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  gateway:
+    build:
+      context: .
+      dockerfile: gateway/Dockerfile
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    environment:
+      JWT_SECRET: ${JWT_SECRET:-docker-compose-secret-key-must-be-at-least-32-chars}
+      MEMBER_SERVICE_URI: http://member-service:8081
+      ORDER_SERVICE_URI: http://order-service:8082
+      STOCK_SERVICE_URI: http://stock-service:8083
+    depends_on:
+      member-service:
+        condition: service_healthy
+      order-service:
+        condition: service_healthy
+      stock-service:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost:8080/actuator/health || exit 1" ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
 volumes:
   member-db-data:
   order-db-data:

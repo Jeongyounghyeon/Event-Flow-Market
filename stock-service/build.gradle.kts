@@ -17,6 +17,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-kafka")
     implementation("org.redisson:redisson:3.43.0")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.postgresql:postgresql")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

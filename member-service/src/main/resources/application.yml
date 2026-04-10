@@ -33,3 +33,13 @@ jwt:
   secret: ${JWT_SECRET:local-dev-secret-key-must-be-at-least-32-characters}
   access-token-expiry: 1800
   refresh-token-expiry: 1209600
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      probes:
+        enabled: true
