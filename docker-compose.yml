@@ -100,6 +100,7 @@ services:
       JWT_SECRET: ${JWT_SECRET:-docker-compose-secret-key-must-be-at-least-32-chars}
       SPRING_DATASOURCE_URL: jdbc:postgresql://member-db:5432/member_db
       SPRING_DATA_REDIS_HOST: redis
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
     depends_on:
       member-db:
         condition: service_healthy
@@ -120,6 +121,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://order-db:5432/order_db
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
     depends_on:
       order-db:
         condition: service_healthy
@@ -141,6 +143,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:postgresql://stock-db:5432/stock_db
       SPRING_DATA_REDIS_HOST: redis
       SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
     depends_on:
       stock-db:
         condition: service_healthy
@@ -167,6 +170,7 @@ services:
       MEMBER_SERVICE_URI: http://member-service:8081
       ORDER_SERVICE_URI: http://order-service:8082
       STOCK_SERVICE_URI: http://stock-service:8083
+      ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
     depends_on:
       member-service:
         condition: service_healthy
@@ -181,7 +185,50 @@ services:
       retries: 5
       start_period: 60s
 
+  kafka-exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: kafka-exporter
+    command:
+      - '--kafka.server=kafka:9092'
+    depends_on:
+      kafka:
+        condition: service_healthy
+    restart: on-failure
+
+  prometheus:
+    image: prom/prometheus:v3.2.1
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./observability/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    depends_on:
+      gateway:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:11.6.1
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./observability/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+
+  zipkin:
+    image: openzipkin/zipkin:3.5
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
 volumes:
   member-db-data:
   order-db-data:
   stock-db-data:
+  grafana-data:
