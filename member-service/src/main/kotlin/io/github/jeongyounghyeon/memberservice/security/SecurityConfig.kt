@@ -25,6 +25,7 @@ class SecurityConfig {
                     "/api/members/token/refresh",
                     "/actuator/health",
                     "/actuator/health/**",
+                    "/actuator/prometheus",
                 ).permitAll()
                     .anyRequest().authenticated()
             }

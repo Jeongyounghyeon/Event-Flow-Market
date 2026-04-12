@@ -18,6 +18,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-kafka")
     implementation("org.redisson:redisson:3.43.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("io.micrometer:micrometer-registry-prometheus")
+    implementation("org.springframework.boot:spring-boot-starter-zipkin")
     implementation("org.postgresql:postgresql")
 
     testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc")

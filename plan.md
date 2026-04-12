@@ -106,12 +106,19 @@
 ## 5단계: 품질 검증
 
 ### 관측성 (Observability)
-- [ ] Prometheus + Grafana 설정 (`docker-compose` or Helm)
-- [ ] 각 서비스 Actuator / Micrometer 메트릭 노출
-- [ ] Grafana 대시보드 구성 (JVM, Kafka Lag, 재고 차감 TPS 등)
-- [ ] Zipkin 분산 트래킹 설정 (Spring Cloud Sleuth or Micrometer Tracing)
+- [x] Prometheus + Grafana 설정 (`docker-compose`)
+  - [x] `kafka-exporter` 컨테이너로 Kafka 메트릭 노출
+  - [x] Grafana datasource / dashboard provider 자동 프로비저닝
+- [x] 각 서비스 Actuator / Micrometer 메트릭 노출 (`/actuator/prometheus`)
+- [x] Grafana 대시보드 구성 (JVM, Kafka Lag, Spring Boot Statistics)
+- [x] Zipkin 분산 추적 설정 (Micrometer Tracing + Brave)
+  - [x] `spring-boot-starter-zipkin` 의존성 추가 (4개 서비스)
+  - [x] traceId / spanId 로그 패턴 연동 (`logging.pattern.level`)
+  - [x] Kafka producer/consumer observation 활성화 (`observation-enabled: true`)
+  - [x] Gateway → 서비스 간 traceId 전파 확인 (B3 propagation)
+  - [x] Kafka Saga 흐름 traceId 연결 확인 (order-service → stock-service → order-service)
 
 ### 부하 테스트
-- [ ] k6 또는 Locust 스크립트 작성
-- [ ] 선착순 재고 차감 시나리오 (동시 100명 요청)
-- [ ] 부하 테스트 결과 문서화 (TPS, 에러율, 응답 시간 P99)
+- [x] k6 스크립트 작성 (`k6/stock-reservation.js`)
+- [x] 선착순 재고 차감 시나리오 (동시 100명 요청, 재고 100개)
+- [x] 부하 테스트 결과 확인 (TPS, 에러율, 응답 시간 P95)

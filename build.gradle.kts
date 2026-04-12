@@ -32,6 +32,7 @@ subprojects {
         }
 
         dependencies {
+            "implementation"("io.micrometer:micrometer-tracing-bridge-otel")
             "implementation"("org.jetbrains.kotlin:kotlin-reflect")
             "implementation"("org.springframework.boot:spring-boot-starter")
             "testImplementation"("org.springframework.boot:spring-boot-starter-test")
