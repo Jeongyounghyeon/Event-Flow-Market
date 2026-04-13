@@ -13,3 +13,4 @@ data:
   MEMBER_SERVICE_URI: "http://member-service:8081"
   ORDER_SERVICE_URI: "http://order-service:8082"
   STOCK_SERVICE_URI: "http://stock-service:8083"
+  ZIPKIN_ENDPOINT: "http://zipkin:9411/api/v2/spans"

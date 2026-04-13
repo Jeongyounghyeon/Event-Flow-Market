@@ -35,6 +35,11 @@ spec:
                 configMapKeyRef:
                   name: common-config
                   key: KAFKA_BOOTSTRAP_SERVERS
+            - name: ZIPKIN_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: common-config
+                  key: ZIPKIN_ENDPOINT
           livenessProbe:
             httpGet:
               path: /actuator/health/liveness
