@@ -5,15 +5,24 @@ PF_PID_DIR  := /tmp/efm-pf
 # ── Port-Forward ──────────────────────────────────────────────────────────────
 
 .PHONY: pf-up
-pf-up: ## 관측성 도구 port-forward 시작 (Zipkin :9411, Prometheus :9090, Grafana :3000)
+pf-up: ## 전체 port-forward 시작 (Gateway :8080, Zipkin :9411, Prometheus :9090, Grafana :3000)
 	@mkdir -p $(PF_PID_DIR)
+	@$(MAKE) _pf-start SVC=gateway    LOCAL=8080 REMOTE=80
 	@$(MAKE) _pf-start SVC=zipkin     LOCAL=9411 REMOTE=9411
 	@$(MAKE) _pf-start SVC=prometheus LOCAL=9090 REMOTE=9090
 	@$(MAKE) _pf-start SVC=grafana    LOCAL=3000 REMOTE=3000
 	@echo ""
+	@echo "  Gateway    → http://localhost:8080"
 	@echo "  Zipkin     → http://localhost:9411"
 	@echo "  Prometheus → http://localhost:9090"
 	@echo "  Grafana    → http://localhost:3000  (admin / admin)"
+
+.PHONY: pf-gateway
+pf-gateway: ## Gateway port-forward 만 시작 (:8080)
+	@mkdir -p $(PF_PID_DIR)
+	@$(MAKE) _pf-start SVC=gateway LOCAL=8080 REMOTE=80
+	@echo ""
+	@echo "  Gateway → http://localhost:8080"
 
 .PHONY: pf-down
 pf-down: ## 모든 port-forward 종료
@@ -96,6 +105,16 @@ rollout: build load ## 이미지 재빌드 후 Deployment rolling restart
 		deployment/order-service deployment/stock-service -n $(NAMESPACE)
 	kubectl rollout status deployment/gateway deployment/member-service \
 		deployment/order-service deployment/stock-service -n $(NAMESPACE)
+
+# ── Database 접속 ─────────────────────────────────────────────────────────────
+
+.PHONY: db
+db: ## DB psql 접속 (SVC=member|order|stock)
+	$(eval DB_NAME := $(SVC)_db)
+	$(eval PG_PASS := $(shell kubectl get secret $(SVC)-db-postgresql -n $(NAMESPACE) \
+		-o jsonpath="{.data.postgres-password}" | base64 -d))
+	kubectl exec -it $(SVC)-db-postgresql-0 -n $(NAMESPACE) -- \
+		env PGPASSWORD=$(PG_PASS) psql -U postgres -d $(DB_NAME)
 
 # ── 상태 확인 ─────────────────────────────────────────────────────────────────
 
