@@ -45,7 +45,7 @@ Client
 
 ![Choreography Saga 흐름](docs/saga-flow.svg)
 
-Orchestration 대신 Choreography를 선택한 배경 → [Orchestration 대신 Choreography를 선택한 배경](../../wiki/)
+Orchestration 대신 Choreography를 선택한 배경 → [Choreography vs Orchestration](../../wiki/Choreography-vs-Orchestration)
 
 ### Transactional Outbox 패턴
 
