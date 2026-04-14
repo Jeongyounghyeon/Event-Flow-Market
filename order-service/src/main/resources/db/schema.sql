@@ -23,7 +23,8 @@ CREATE TABLE IF NOT EXISTS outbox_events
     aggregate_id   BIGINT       NOT NULL,                   -- orders.id
     event_type     VARCHAR(100) NOT NULL,                   -- 'ORDER_CREATED' | 'ORDER_CANCELLED'
     payload        TEXT         NOT NULL,                   -- 직렬화된 이벤트 데이터
-    status         VARCHAR(20)  NOT NULL DEFAULT 'PENDING', -- PENDING | PUBLISHED | FAILED
+    status         VARCHAR(20)  NOT NULL DEFAULT 'PENDING', -- PENDING | PUBLISHED | FAILED | DEAD_LETTER
+    retry_count    INT          NOT NULL DEFAULT 0,         -- 발행 실패 횟수 (MAX_RETRY 초과 시 DEAD_LETTER)
     created_at     TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     published_at   TIMESTAMPTZ                              -- Kafka 발행 성공 시각
 );

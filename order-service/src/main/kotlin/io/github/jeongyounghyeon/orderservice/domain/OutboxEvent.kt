@@ -37,4 +37,7 @@ class OutboxEvent(
 
     @Column(name = "published_at")
     var publishedAt: Instant? = null,
+
+    @Column(name = "retry_count", nullable = false)
+    var retryCount: Int = 0,
 )

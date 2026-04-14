@@ -17,13 +17,20 @@ class OrderEventPublisher(
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
 
+    companion object {
+        const val MAX_RETRY = 5
+    }
+
     @Scheduled(fixedDelay = 1000)
     @Transactional
     fun publish() {
-        val pending = outboxEventRepository.findAllByStatus(OutboxStatus.PENDING)
-        if (pending.isEmpty()) return
+        val retryable = outboxEventRepository.findAllByStatusInAndRetryCountLessThan(
+            listOf(OutboxStatus.PENDING, OutboxStatus.FAILED),
+            MAX_RETRY,
+        )
+        if (retryable.isEmpty()) return
 
-        pending.forEach { event ->
+        retryable.forEach { event ->
             val topic = when (event.eventType) {
                 "ORDER_CREATED" -> KafkaTopics.ORDER_CREATED
                 "ORDER_CANCELLED" -> KafkaTopics.ORDER_CANCELLED
@@ -38,8 +45,14 @@ class OrderEventPublisher(
                 event.publishedAt = Instant.now()
                 log.debug("Outbox 이벤트 발행 완료: id=${event.id}, topic=$topic")
             } catch (e: Exception) {
-                log.error("Outbox 이벤트 발행 실패: id=${event.id}", e)
-                event.status = OutboxStatus.FAILED
+                event.retryCount++
+                event.status = if (event.retryCount >= MAX_RETRY) {
+                    log.error("Outbox 이벤트 최대 재시도 초과, DEAD_LETTER 처리: id=${event.id}")
+                    OutboxStatus.DEAD_LETTER
+                } else {
+                    log.warn("Outbox 이벤트 발행 실패 (retry=${event.retryCount}/${MAX_RETRY}): id=${event.id}", e)
+                    OutboxStatus.FAILED
+                }
             }
         }
     }
