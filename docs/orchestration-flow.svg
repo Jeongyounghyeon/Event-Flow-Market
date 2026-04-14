@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 400" width="720" height="400" font-family="Arial, sans-serif">
+  <defs>
+    <marker id="arr-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#1E88E5"/>
+    </marker>
+    <marker id="arr-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#43A047"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="720" height="400" fill="#FAFAFA" rx="10"/>
+
+  <!-- Title -->
+  <text x="360" y="34" text-anchor="middle" font-size="16" font-weight="bold" fill="#212121">Orchestration Saga 구조</text>
+  <text x="360" y="52" text-anchor="middle" font-size="11" fill="#757575">(서비스 확장 시 전환 방향)</text>
+
+  <!-- ── Orchestrator Box ── -->
+  <rect x="40" y="72" width="155" height="240" rx="10" fill="#4527A0" stroke="#311B92" stroke-width="1.5"/>
+  <text x="117" y="98" text-anchor="middle" font-size="13" font-weight="bold" fill="#FFFFFF">Orchestrator</text>
+  <line x1="60" y1="106" x2="175" y2="106" stroke="#7E57C2" stroke-width="1"/>
+  <text x="117" y="122" text-anchor="middle" font-size="10" fill="#CE93D8">Saga State Machine</text>
+  <!-- State list -->
+  <rect x="58" y="132" width="119" height="18" rx="3" fill="#5E35B1" opacity="0.7"/>
+  <text x="117" y="145" text-anchor="middle" font-size="10" fill="#EDE7F6">STARTED</text>
+  <rect x="58" y="155" width="119" height="18" rx="3" fill="#5E35B1" opacity="0.7"/>
+  <text x="117" y="168" text-anchor="middle" font-size="10" fill="#EDE7F6">STOCK_RESERVED</text>
+  <rect x="58" y="178" width="119" height="18" rx="3" fill="#5E35B1" opacity="0.7"/>
+  <text x="117" y="191" text-anchor="middle" font-size="10" fill="#EDE7F6">PAYMENT_APPROVED</text>
+  <rect x="58" y="201" width="119" height="18" rx="3" fill="#5E35B1" opacity="0.7"/>
+  <text x="117" y="214" text-anchor="middle" font-size="10" fill="#EDE7F6">COMPLETED</text>
+  <rect x="58" y="224" width="119" height="18" rx="3" fill="#B71C1C" opacity="0.6"/>
+  <text x="117" y="237" text-anchor="middle" font-size="10" fill="#FFCDD2">COMPENSATING</text>
+  <rect x="58" y="247" width="119" height="18" rx="3" fill="#B71C1C" opacity="0.6"/>
+  <text x="117" y="260" text-anchor="middle" font-size="10" fill="#FFCDD2">FAILED</text>
+  <!-- Lifeline -->
+  <line x1="117" y1="312" x2="117" y2="350" stroke="#7E57C2" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.6"/>
+
+  <!-- ── Kafka Badge (center) ── -->
+  <rect x="268" y="183" width="184" height="26" rx="6" fill="#FF6D00" stroke="#E65100" stroke-width="1.2"/>
+  <text x="360" y="200" text-anchor="middle" font-size="11" font-weight="bold" fill="#FFFFFF">Apache Kafka (Command/Event)</text>
+
+  <!-- ── Stock Service ── -->
+  <rect x="500" y="120" width="175" height="56" rx="9" fill="#1565C0" stroke="#0D47A1" stroke-width="1.5"/>
+  <text x="587" y="146" text-anchor="middle" font-size="13" font-weight="bold" fill="#FFFFFF">Stock Service</text>
+  <text x="587" y="164" text-anchor="middle" font-size="10" fill="#BBDEFB">재고 차감 / 복구</text>
+  <!-- Lifeline -->
+  <line x1="587" y1="136" x2="587" y2="175" stroke="#1565C0" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+
+  <!-- ── Payment Service ── -->
+  <rect x="500" y="233" width="175" height="56" rx="9" fill="#00695C" stroke="#004D40" stroke-width="1.5"/>
+  <text x="587" y="259" text-anchor="middle" font-size="13" font-weight="bold" fill="#FFFFFF">Payment Service</text>
+  <text x="587" y="277" text-anchor="middle" font-size="10" fill="#B2DFDB">결제 승인 / 취소</text>
+  <!-- Lifeline -->
+  <line x1="587" y1="173" x2="587" y2="233" stroke="#00695C" stroke-width="1.5" stroke-dasharray="5,3" opacity="0.5"/>
+
+  <!-- ── Extensibility hint ── -->
+  <text x="587" y="318" text-anchor="middle" font-size="22" fill="#9E9E9E" letter-spacing="6">···</text>
+  <text x="587" y="338" text-anchor="middle" font-size="10" fill="#9E9E9E">새 서비스 추가 가능</text>
+
+  <!-- ── Arrow 1: OrderCreatedCommand → Stock ── -->
+  <line x1="196" y1="143" x2="498" y2="143" stroke="#1E88E5" stroke-width="2" marker-end="url(#arr-blue)"/>
+  <rect x="240" y="128" width="218" height="20" rx="4" fill="#E3F2FD" stroke="#1E88E5" stroke-width="1"/>
+  <text x="349" y="142" text-anchor="middle" font-size="10" font-weight="bold" fill="#1565C0">OrderCreatedCommand</text>
+
+  <!-- ── Arrow 2: StockReservedEvent ← Stock ── -->
+  <line x1="498" y1="168" x2="196" y2="168" stroke="#43A047" stroke-width="2" marker-end="url(#arr-green)"/>
+  <rect x="240" y="153" width="218" height="20" rx="4" fill="#E8F5E9" stroke="#43A047" stroke-width="1"/>
+  <text x="349" y="167" text-anchor="middle" font-size="10" font-weight="bold" fill="#2E7D32">StockReservedEvent</text>
+
+  <!-- ── Arrow 3: PaymentCommand → Payment ── -->
+  <line x1="196" y1="258" x2="498" y2="258" stroke="#1E88E5" stroke-width="2" marker-end="url(#arr-blue)"/>
+  <rect x="240" y="243" width="218" height="20" rx="4" fill="#E3F2FD" stroke="#1E88E5" stroke-width="1"/>
+  <text x="349" y="257" text-anchor="middle" font-size="10" font-weight="bold" fill="#1565C0">PaymentCommand</text>
+
+  <!-- ── Arrow 4: PaymentApprovedEvent ← Payment ── -->
+  <line x1="498" y1="283" x2="196" y2="283" stroke="#43A047" stroke-width="2" marker-end="url(#arr-green)"/>
+  <rect x="240" y="268" width="218" height="20" rx="4" fill="#E8F5E9" stroke="#43A047" stroke-width="1"/>
+  <text x="349" y="282" text-anchor="middle" font-size="10" font-weight="bold" fill="#2E7D32">PaymentApprovedEvent</text>
+
+  <!-- ── Legend ── -->
+  <rect x="40" y="360" width="640" height="28" rx="7" fill="#FFFFFF" stroke="#E0E0E0" stroke-width="1"/>
+  <line x1="65" y1="374" x2="95" y2="374" stroke="#1E88E5" stroke-width="2"/>
+  <text x="100" y="378" font-size="10" fill="#555">Command (Orchestrator → Service)</text>
+  <line x1="360" y1="374" x2="390" y2="374" stroke="#43A047" stroke-width="2"/>
+  <text x="395" y="378" font-size="10" fill="#555">Event (Service → Orchestrator)</text>
+</svg>
